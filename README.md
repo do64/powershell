@@ -1,4 +1,5 @@
 # PoShPub
 PowerShell Repo  
-I'll be updating slowly.  
+
+Updated when I write new stuff.
 Feel free to use and improve.
