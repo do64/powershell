@@ -7,13 +7,37 @@
 #I add this to my PowerShell $profile
 
 Function which ($command){
-    $command_path = (Get-Command $command).Path
 
-    if ($command_path){
+    #Check if Path property exists and return value if so
+    if ((Get-Command $command).Path){
         (Get-Command $command).Path
     }
 
-    else {
-        Get-Command $command
+    #Check if DLL property exists and return value if so
+    elseif ((Get-Command $command).DLL){
+        (Get-Command $command).DLL
+    }
+
+    #Check if $command is Alias and return DisplayName if so
+    elseif ((Get-Command $command).CommandType -eq "Alias"){
+        $alias = (Get-Command $command).DisplayName
+        Write-Output "Alias: $alias"
+    }
+    
+    #If command is a function return the module it is from if the Module property exists
+    elseif ((Get-Command $command).CommandType -eq "Function"){
+        if ((Get-Command $command).Module){
+            $module = (Get-Command $command).Module
+            $module_path = (Get-Module $module).Path
+            Write-Output "Function from module: $module_path"
+        }
+        else {
+            Write-Output "$command is a function"
+        }
     }
 }
+
+
+
+
+
