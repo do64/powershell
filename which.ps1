@@ -8,6 +8,8 @@
 
 Function which ($command){
 
+    $ErrorActionPreference= 'silentlycontinue'
+
     #Check if Path property exists and return value if so
     if ((Get-Command $command).Path){
         (Get-Command $command).Path
@@ -21,7 +23,7 @@ Function which ($command){
     #Check if $command is Alias and return DisplayName if so
     elseif ((Get-Command $command).CommandType -eq "Alias"){
         $alias = (Get-Command $command).DisplayName
-        Write-Output "Alias: $alias"
+        Write-Output "$alias"
     }
     
     #If command is a function return the module it is from if the Module property exists
@@ -34,6 +36,9 @@ Function which ($command){
         else {
             Write-Output "$command is a function"
         }
+    }
+    else {
+        break
     }
 }
 
