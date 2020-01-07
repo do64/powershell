@@ -1,10 +1,15 @@
-#PowerShell function for a 'which' type command as used in UNIX systems 
-
-#If the 'path' for a command is present the function returns the 'path'
-#If there is no 'path' listed the function returns the standard output
-#of the Get-Command which provides other useful information
-
-#I add this to my PowerShell $profile
+<#
+    .Synopsis
+        which [-a] filename
+    .Description
+        An attempt to emulate the UNIX which command in PowerShell. which returns the pathnames of the files, alias, or functions that would be executed in the current environment.
+        It does this by using the 'Get-Command' PowerShell function to search for the Path, DLL, or CommandType of the argument.
+        
+        The argument is first checked for the 'Path' property, if this is not found the agument is then checked for the 'DLL' property. If neither of these are found the 'which'
+        cmdlet then checks for the 'CommandType' property and returns applicable information.
+    .Example 
+        which notepad.exe 
+        #>
 
 Function which ($command){
 
