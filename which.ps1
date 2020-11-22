@@ -21,7 +21,7 @@ if ((Get-Command $filename).Path){
 
 #Check if DLL property exists and return value if so
 elseif ((Get-Command $filename).DLL){
-    if ($a) {(Get-Command $filename).DLL}
+    if ($a) {(Get-Command $filename -All).DLL}
     else {(Get-Command $filename).DLL}
 }
 
