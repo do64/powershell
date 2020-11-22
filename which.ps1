@@ -6,7 +6,7 @@
 param(
   [Alias("all")]  
   [switch]$a,
-  [Parameter(Mandatory=$true)]
+  [Parameter(Mandatory=$false)]
   [string]
   $filename
 )
