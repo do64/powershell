@@ -4,45 +4,50 @@
 #If there is no 'path' listed the function returns the standard output
 #of the Get-Command which provides other useful information
 
-#I add this to my PowerShell $profile
+[CmdletBinding()]
+param(
+  [Alias("all")]  
+  [switch]$a,
+  [Parameter(Mandatory=$true)]
+  [string]
+  $filename
+)
 
-Function which ($command){
+$ErrorActionPreference= 'silentlycontinue'
 
-    $ErrorActionPreference= 'silentlycontinue'
-
-    #Check if Path property exists and return value if so
-    if ((Get-Command $command).Path){
-        (Get-Command $command).Path
-    }
-
-    #Check if DLL property exists and return value if so
-    elseif ((Get-Command $command).DLL){
-        (Get-Command $command).DLL
-    }
-
-    #Check if $command is Alias and return DisplayName if so
-    elseif ((Get-Command $command).CommandType -eq "Alias"){
-        $alias = (Get-Command $command).DisplayName
-        Write-Output "$alias"
-    }
-    
-    #If command is a function return the module it is from if the Module property exists
-    elseif ((Get-Command $command).CommandType -eq "Function"){
-        if ((Get-Command $command).Module){
-            $module = (Get-Command $command).Module
-            $module_path = (Get-Module $module).Path
-            Write-Output "Function from module: $module_path"
-        }
-        else {
-            Write-Output "$command is a function"
-        }
-    }
-    else {
-        break
-    }
+#Check if Path property exists and return value if so
+if ((Get-Command $filename).Path){
+    if ($a) {(Get-Command $filename -All).Path}
+    else {(Get-Command $filename).Path}
 }
 
+#Check if DLL property exists and return value if so
+elseif ((Get-Command $filename).DLL){
+    if ($a) {(Get-Command $filename).DLL}
+    else {(Get-Command $filename).DLL}
+}
 
-
-
-
+#Check if $filename is Alias and return DisplayName if so
+elseif ((Get-Command $filename).CommandType -eq "Alias"){
+    if ($a) {$alias = (Get-Command $filename -All).DisplayName}
+    else {$alias = (Get-Command $filename).DisplayName}
+    Write-Output "$alias"
+}
+    
+#If command is a function return the module it is from if the Module property exists
+elseif ((Get-Command $filename).CommandType -eq "Function"){
+    if ((Get-Command $filename).Module){
+        if ($a) {
+            $module = (Get-Command $filename -All).Module.Path
+        } else {
+            $module = (Get-Command $filename).Module.Path
+        }
+        Write-Output "Function from module: $module"
+    }
+    else {
+        Write-Output "$filename is a function"
+    }
+}
+else {
+    break
+}
