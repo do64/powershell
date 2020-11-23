@@ -27,9 +27,9 @@ elseif ((Get-Command $filename).DLL){
 
 #Check if $filename is Alias and return DisplayName if so
 elseif ((Get-Command $filename).CommandType -eq "Alias"){
-    if ($a) {$alias = (Get-Command $filename -All).DisplayName}
-    else {$alias = (Get-Command $filename).DisplayName}
-    Write-Output "$alias"
+    if ($a) {$alias = (Get-Command $filename -All).Definition}
+    else {$alias = (Get-Command $filename).Definition}
+    Write-Output "$filename -> $alias"
 }
     
 #If command is a function return the module it is from if the Module property exists
