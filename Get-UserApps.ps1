@@ -23,10 +23,15 @@ $UnloadedHives = (Compare-Object $Users.SID $LoadedHives.PSChildname).InputObjec
 
 $AppList = @() # List to hold customized application objects
 foreach ($User in $Users) {
+
     if ($User.SID -in $UnloadedHives) {reg load HKU\$($User.SID) C:\Users\$($User.Name)\NTUSER.DAT}
-    $64bitUserApps = @(Get-ChildItem registry::HKEY_USERS\$($User.SID)\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall -ErrorAction SilentlyContinue | Get-ItemProperty)
-    $32bitUserApps = @(Get-ChildItem registry::HKEY_USERS\$($User.SID)\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall -ErrorAction SilentlyContinue | Get-ItemProperty)
+
+    $64bitUserApps = @(Get-ChildItem registry::HKEY_USERS\$($User.SID)\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall `
+    -ErrorAction SilentlyContinue | Get-ItemProperty)
+    $32bitUserApps = @(Get-ChildItem registry::HKEY_USERS\$($User.SID)\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall `
+    -ErrorAction SilentlyContinue | Get-ItemProperty)
     $InstalledUserApps = $64bitUserApps + $32bitUserApps
+
     foreach ($App in $InstalledUserApps) {
         $App | Add-Member -NotePropertyName 'User' -NotePropertyValue $User.Name
         try {
@@ -34,6 +39,7 @@ foreach ($User in $Users) {
         } catch {}
         $AppList += $App
     }
+    
     if ($User.SID -in $UnloadedHives) {
         [gc]::Collect()
         reg unload HKU\$($User.SID) | Out-Null
