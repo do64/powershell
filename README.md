@@ -1,7 +1,7 @@
 # PowerShell
 Public PowerShell stuff I've written.
 
-### Set-TaskbarVisibility ###
+### Set-TaskbarVisibility.ps1 ###
 Toggles task bar visibility if no argument is provided. Parameter 'Visibility' can be added to explictly set the taskbar as either 'Visible' or 'Autohide'.
 
 ### which.ps1 ###
