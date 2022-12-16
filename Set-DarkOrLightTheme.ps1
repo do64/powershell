@@ -26,7 +26,6 @@ function SetTerminal($TM) {
     $SettingsJson = Get-Content -Raw -Path $TerminalSettingsJsonPath | ConvertFrom-Json
     $Profiles = $SettingsJson.profiles.list
     foreach ($P in $Profiles) {
-        Write-Host $P.guid
         if (($SettingsJson.profiles.list | Where-Object {$_.guid -eq $P.guid}).colorScheme) {
             ($SettingsJson.profiles.list | Where-Object {$_.guid -eq $P.guid}).colorScheme = $TerminalMode
         } else {
